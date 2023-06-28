@@ -1,0 +1,39 @@
+{
+  "description": "Delete many records",
+  "label": "Delete Many Records",
+  "category": "CRUD",
+  "icon": { "color": "Pink", "name": "DeleteIcon" },
+  "options": [
+    {
+      "meta": {
+        "type": "Collection",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "collection",
+      "label": "Collection",
+      "info": "The collection you want to delete."
+    },
+    {
+      "meta": {
+        "type": "Text"
+      },
+      "name": "modelName",
+      "label": "Model name",
+      "info": "The (capitalized) name of the model from the collection that's going to be deleted!",
+      "advanced": false
+    },
+    {
+      "name": "result",
+      "label": "Result",
+      "meta": {
+        "type": "Output",
+        "output": {
+          "type": "Text"
+        }
+      }
+    }
+  ],
+  "yields": "NONE"
+}
