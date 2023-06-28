@@ -1,0 +1,27 @@
+#actionJS
+**.tmp**
+
+#tests
+**/coverage/**
+
+# dependencies
+**/node_modules/**
+
+# production
+/dist
+
+# misc
+**swagger.json**
+.DS_Store
+.vscode/
+.nvmrc
+.tool-versions
+.idea
+.secrets
+npm-debug.log*
+yarn.lock
+yarn-debug.log*
+yarn-error.log*
+
+# swp files
+*.swp

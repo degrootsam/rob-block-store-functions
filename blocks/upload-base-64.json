@@ -1,0 +1,5 @@
+{
+  "dependencies": ["Base64"],
+  "functions": ["uploadBase64 1.1"],
+  "includes": []
+}
