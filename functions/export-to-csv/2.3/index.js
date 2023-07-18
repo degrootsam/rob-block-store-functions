@@ -1,5 +1,5 @@
 import { ExportToCsv } from "export-to-csv";
-import templayed from "./templayed";
+import templayed from "../../utils/templayed";
 
 const snakeToCamel = (str) => {
   str = str.replace(/_[0-9]/g, (m, chr) => "!" + m);
