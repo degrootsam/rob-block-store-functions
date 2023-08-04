@@ -1,0 +1,138 @@
+{
+  "description": "Create a CSV from a collection of records",
+  "label": "Export to CSV",
+  "category": "Utilities",
+  "icon": {
+    "color": "Green",
+    "name": "DownloadIcon"
+  },
+  "options": [
+    {
+      "name": "modelSource",
+      "label": "Model to export records from",
+      "meta": {
+        "type": "Model",
+        "validations": {
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "filter",
+      "label": "Filter",
+      "info": "Filter based on Data API filter with variable options.",
+      "meta": {
+        "type": "Text",
+        "default": ""
+      }
+    },
+    {
+      "info": "Variables to be used in the filter option.",
+      "label": "Variables",
+      "meta": {
+        "type": "Map"
+      },
+      "name": "filterVariables"
+    },
+    {
+      "label": "Delimiter",
+      "info": "Set a delimiter for the CSV file.",
+      "name": "delimiter",
+      "meta": {
+        "validations": {
+          "required": true
+        },
+        "type": "Select",
+        "values": [
+          {
+            "label": ";",
+            "value": ";"
+          },
+          {
+            "label": ",",
+            "value": ","
+          },
+          {
+            "label": "|",
+            "value": "|"
+          },
+          {
+            "label": "tab",
+            "value": "\t"
+          },
+          {
+            "label": "space",
+            "value": " "
+          }
+        ]
+      }
+    },
+    {
+      "meta": {
+        "type": "Model",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "modelTarget",
+      "label": "Model to save CSV into"
+    },
+    {
+      "meta": {
+        "allowedKinds": ["FILE"],
+        "type": "Property",
+        "model": "modelTarget",
+        "validations": {
+          "required": true
+        }
+      },
+      "configuration": {
+        "dependsOn": [
+          {
+            "option": "modelTarget",
+            "action": "CLEAR"
+          }
+        ]
+      },
+      "name": "propertyTarget",
+      "label": "Property to save CSV into"
+    },
+    {
+      "name": "fileName",
+      "label": "Filename",
+      "info": "Name of the exported file",
+      "meta": {
+        "type": "Text"
+      }
+    },
+    {
+      "name": "exportPropertyMapping",
+      "label": "Property Mapping",
+      "info": "KEY column = column name for CSV, VALUE column = the database name (in snake_case) of the property. For belongs-to relations use the datebase name (in snake_case)",
+      "meta": {
+        "type": "Map"
+      }
+    },
+    {
+      "label": "Use BOM",
+      "name": "useBom",
+      "info": "If true, adds a BOM character at the start of the CSV to improve file compatibility.",
+      "meta": {
+        "type": "Boolean",
+        "default": true
+      }
+    },
+    {
+      "meta": {
+        "type": "Output",
+        "output": {
+          "type": "Text"
+        }
+      },
+      "name": "reference",
+      "label": "As",
+      "info": "The file reference"
+    }
+  ],
+  "yields": "NONE"
+}
