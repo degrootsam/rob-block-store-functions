@@ -32,53 +32,64 @@ const getValue = (prop, obj) => {
   }, obj);
 };
 
-const reOrderProperties = (unOrdererprops) => {
-  let orderedPropMapping = [];
-  unOrdererprops.map((prop, index) => {
-    const isRelation = prop.value.includes(".");
+const parseDotSeparatedStringToObject = (str, value) => {
+  const keys = str.split(".");
+  const obj = {};
 
-    if (isRelation) {
-      const [relationalModel, nestedProp] = prop.value.split(".");
-
-      const existingProp = orderedPropMapping.find(
-        (item) => item.value.split(".")[0] === relationalModel
-      );
-
-      if (existingProp) {
-        existingProp.RelationValue = `${existingProp.value} ${nestedProp}`;
-      }
-    }
-    orderedPropMapping.push({
-      ...prop,
-      index,
-      isRelation,
-    });
-  });
-
-  return orderedPropMapping;
-};
-
-const prepareRelationMappings = (propertyMapping) => {
-  const propertyQuery = [];
-
-  for (const mapping of propertyMapping) {
-    if (mapping.isRelation && mapping.RelationValue) {
-      const [relationModelName, propertyNames] =
-        mapping.RelationValue.split(".");
-      if (relationModelName && propertyNames) {
-        propertyQuery.push(
-          `${snakeToCamel(relationModelName)}{${propertyNames
-            .split(" ")
-            .map((prop) => snakeToCamel(prop))
-            .join(" ")}}`
-        );
-      }
-    } else if (mapping.isRelation === false) {
-      propertyQuery.push(snakeToCamel(mapping.value));
+  let currentObject = obj;
+  for (let i = 0; i < keys.length; i++) {
+    const key = snakeToCamel(keys[i]);
+    if (i === keys.length - 1) {
+      currentObject[key] = value;
+    } else {
+      currentObject[key] = {};
+      currentObject = currentObject[key];
     }
   }
 
-  return propertyQuery;
+  return obj;
+};
+
+const convertMappingToGraphQLQuery = (arr) => {
+  const resultObj = {};
+
+  for (const item of arr) {
+    const { value } = item;
+    const parsedObj = parseDotSeparatedStringToObject(value, null);
+    mergeObjects(resultObj, parsedObj);
+  }
+
+  return generateGraphQLQuery(resultObj);
+};
+
+const mergeObjects = (target, source) => {
+  for (const key in source) {
+    if (typeof source[key] === "object" && source[key] !== null) {
+      target[key] = target[key] || {};
+      mergeObjects(target[key], source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+};
+
+const generateGraphQLQuery = (obj, indent = 0) => {
+  const indentStr = " ".repeat(indent * 2);
+  let query = "{\n";
+
+  for (const key in obj) {
+    query += `${indentStr}${key}`;
+
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      query += " " + generateGraphQLQuery(obj[key], indent + 1);
+    }
+
+    query += "\n";
+  }
+
+  query += `${indentStr}}`;
+
+  return query;
 };
 
 const exportCsv = async ({
@@ -92,11 +103,9 @@ const exportCsv = async ({
   filter,
   filterVariables,
 }) => {
-  const reOrderedPropertyMappings = reOrderProperties([
+  const gqlPropertyNames = convertMappingToGraphQLQuery([
     ...exportPropertyMapping,
   ]);
-
-  const gqlPropertyNames = prepareRelationMappings(reOrderedPropertyMappings);
 
   const variableMap = filterVariables.reduce((previousValue, currentValue) => {
     previousValue[currentValue.key] = currentValue.value;
@@ -108,12 +117,13 @@ const exportCsv = async ({
       ? `where: {${templayed(filter)(variableMap)}}`
       : ``;
 
+  console.log(gqlPropertyNames);
+
   const query = `
         query {
           all${modelNameSource}(${queryFilter} skip: $skip, take: $take) {
-            results {
-              ${gqlPropertyNames.join(" ")}
-            }
+            results
+              ${gqlPropertyNames.toString()}
             totalCount
           }
         }
@@ -121,16 +131,17 @@ const exportCsv = async ({
 
   const exportData = await getAllRecords(query, 0, 200, []);
 
-  const exportColumnNames = reOrderedPropertyMappings.reduce(
-    (acc, { key, value, isRelation }) => ({
+  const exportColumnNames = [...exportPropertyMapping].reduce(
+    (acc, { key, value }) => ({
       ...acc,
       ...{
-        [key]: isRelation
-          ? value
-              .split(".")
-              .map((item) => snakeToCamel(item))
-              .join(".")
-          : snakeToCamel(value),
+        [key]:
+          value.split(".").length > 1
+            ? value
+                .split(".")
+                .map((item) => snakeToCamel(item))
+                .join(".")
+            : snakeToCamel(value),
       },
     }),
     {}
