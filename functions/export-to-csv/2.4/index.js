@@ -117,17 +117,15 @@ const exportCsv = async ({
       ? `where: {${templayed(filter)(variableMap)}}`
       : ``;
 
-  console.log(gqlPropertyNames);
-
   const query = `
-        query {
-          all${modelNameSource}(${queryFilter} skip: $skip, take: $take) {
-            results
-              ${gqlPropertyNames.toString()}
-            totalCount
-          }
-        }
-      `;
+    query {
+      all${modelNameSource}(${queryFilter} skip: $skip, take: $take) {
+        results
+          ${gqlPropertyNames.toString()}
+        totalCount
+      }
+    }
+  `;
 
   const exportData = await getAllRecords(query, 0, 200, []);
 
