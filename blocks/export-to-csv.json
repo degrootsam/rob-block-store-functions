@@ -1,5 +1,5 @@
 {
   "dependencies": ["export-to-csv"],
-  "functions": ["exportToCsv 2.4"],
+  "functions": ["exportToCsv 2.5"],
   "includes": ["./functions/utils"]
 }
