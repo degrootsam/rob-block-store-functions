@@ -162,8 +162,6 @@ const xlsxExport = async ({
     );
   });
 
-  console.log({ exportDataWithColumnNamesOrdered });
-
   try {
     if (type == "csv") {
       return {
