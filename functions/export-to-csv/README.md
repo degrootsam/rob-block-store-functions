@@ -14,7 +14,24 @@ This function can be used to export data and properties from a specific data mod
 | Property to save CSV into         | Select the file property in which you want to save the exported CSV file. The property option is dependant on the model you have selected in the option "Model to save CSV into". |
 | File name                         | Provide the name of the exported file. |
 | Properties mapping                | The "key" represents the column name in the exported file. The "value" should be the database name of the property in snake_case. For belongs-to relations use the database relation name annotation for both the relation and the property name separated by a dot. <br><br> Some examples: <table><thead><tr><th>KEY</th><th>VALUE</th></thead> <tbody><tr><td>Identifier</td><td>id</td></tr> <tr><td>Created at</td><td>created_at</td></tr> <tr><td>Property name</td><td>relation_model_name.property_name</td></tr> </tbody></table> |
-| Date formatting                   | The "key" represents the value of the column name used in the Properties mapping section. The "value" should be the format you want to use. For an overview of most common use-cases see below.
+| Date formatting                   | The "key" represents the value of the column name used in the Properties mapping section. The "value" should be the format you want to use. The most common options are:         <table>
+            <thead><tr><td>Unit</td><td>Pattern</td><td>Result example</td></tr><thead>
+            <body>
+            <tr><td>Year</td><td>yyyy</td><td>1998, 2023, 2024</td></tr>
+            <tr><td></td><td>yy</td><td>98, 23, 24</td></tr>
+            <tr><td>Month</td><td>M</td><td>1, 2, ..., 12</td></tr>
+            <tr><td></td><td>MM</td><td>01, 02, ..., 12</td></tr>
+            <tr><td></td><td>MMM</td><td>Jan, Feb, ..., Dec</td></tr>
+            <tr><td>Day of month</td><td>d</td><td>1, 2, ..., 31</td></tr>
+            <tr><td></td><td>dd</td><td>01, 02, ..., 31</td></tr>
+            <tr><td>Hour [0-23]</td><td>H</td><td>0, 1, 2, ..., 23</td></tr>
+            <tr><td></td><td>HH</td><td>00, 01, 02, ..., 23</td></tr>
+            <tr><td>Minute</td><td>m</td><td>0, 1, ..., 59</td></tr>
+            <tr><td></td><td>mm</td><td>00, 01, ..., 592</td></tr>
+            <tr><td>Second</td><td>s</td><td>0, 1, ..., 59	</td></tr>
+            <tr><td></td><td>ss</td><td>00, 01, ..., 59</td></tr>
+            </tbody>
+        </table>.
 | Use BOM                           | If true, a BOM character will be added to the start of the CSV file to improve interoperability with programs interacting with CSV.
 | As                                | The name you want to give the result variable. The result will be a file reference (not to be confused with an asset URL!). The file reference should then be stored in the appropriate file property.
 
