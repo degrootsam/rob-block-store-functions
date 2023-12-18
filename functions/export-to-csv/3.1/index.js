@@ -124,18 +124,25 @@ const dataExport = async ({
   }, {});
 
   const getValue = (prop, obj) => {
-    const foundDateFormat = dateFormatMapping.find(
-      (item) =>
-        item.key ===
-        exportPropertyMapping.find((item) => item.value === camelToSnake(prop))
-          ?.key
+    const exportPropKey = exportPropertyMapping.find(
+      (item) => item.value === camelToSnake(prop)
+    )?.key;
+
+    const dateFormat = dateFormatMapping.find(
+      (item) => item.key === exportPropKey
     )?.value;
 
     return prop.split(".").reduce((result, key) => {
-      if (result && foundDateFormat) {
-        return format(parseISO(result[key]), foundDateFormat);
+      if (result && result[key] && dateFormat) {
+        const dateValue =
+          result[key].length === 10
+            ? parse(result[key], "yyyy-MM-dd", new Date())
+            : parseISO(result[key]);
+        return format(dateValue, dateFormat);
+      } else if (result && result[key]) {
+        return result && result[key];
       }
-      return result && result[key];
+      return "";
     }, obj);
   };
 
