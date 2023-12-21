@@ -131,7 +131,7 @@
     {
       "name": "dateFormatMapping",
       "label": "Date formatting",
-      "info": "KEY column = column name which is used in the property mapping, VALUE column = Date format (for example: MM-DD-yyyy) see the documentation for more format options",
+      "info": "KEY column = column name which is used in the property mapping, VALUE column = Date format (for example: MM-dd-yyyy) see the documentation for more format options",
       "meta": {
         "type": "Map"
       }
