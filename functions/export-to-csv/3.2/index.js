@@ -155,12 +155,12 @@ const dataExport = async ({
               .toString()
               .replace(".", valueFormat[1].toString().trim());
           default:
-            return result && result[key];
+            return result[key];
         }
-      } else {
-        if (result && result[key]) return result && result[key];
-        else return "";
+      } else if (result && result[key]) {
+        return result[key];
       }
+      return "";
     }, obj);
   };
 
