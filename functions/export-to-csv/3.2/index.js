@@ -158,7 +158,8 @@ const dataExport = async ({
             return result && result[key];
         }
       } else {
-        return "";
+        if (result && result[key]) return result && result[key];
+        else return "";
       }
     }, obj);
   };
