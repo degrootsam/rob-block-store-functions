@@ -123,15 +123,15 @@
     {
       "name": "exportPropertyMapping",
       "label": "Property Mapping",
-      "info": "KEY column = column name for the file, VALUE column = the database name (in snake_case) of the property. For belongs-to relations use the datebase name (in snake_case)",
+      "info": "KEY = desired column name in the export file, VALUE = the database name (in snake_case) of the property. For belongs-to relations also use the datebase name (in snake_case)",
       "meta": {
         "type": "Map"
       }
     },
     {
       "name": "formatPropertyMapping",
-      "label": "Format mapping for export columns (price and decimal (if you want to deviate from the default decimal notation,\".\") and date/time properties are currently supported)",
-      "info": "KEY = export property mapping column name, VALUE = format of the property. Allowed format values: \"Price\", \"Decimal\", \"Date\", \"Time\", or \"Datetime\". The notation is as follows: \"Decimal|,\", i.e. \"Decimal|,\" or \"Date|<datefns format>\", i.e. \"Date|dd-MM-yyyy\". The format behind the comma needs to be entered in accordance with the date-fns format (i.e. dd-MM-yyyy or MM/dd/yyyy etc), see https://date-fns.org/v2.16.1/docs/format",
+      "label": "Format mapping for export columns",
+      "info": "KEY = column name in the export file (same as key in property mapping above), VALUE = format of the property value. Supported properties: \"Price\", \"Decimal\", \"Date\", \"Time\", or \"Datetime\". The notation can be as follows: \"Decimal|.\", e.g. \"Decimal|,\" or \"Date|<datefns format>\", e.g. \"Date|dd-MM-yyyy\". The date format after the pipe symbol needs to be entered in accordance with the date-fns format (e.g. dd-MM-yyyy or MM/dd/yyyy etc), see https://date-fns.org/v2.16.1/docs/format",
       "meta": {
         "type": "Map"
       }
