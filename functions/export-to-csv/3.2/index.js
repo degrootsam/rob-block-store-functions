@@ -140,7 +140,8 @@ const dataExport = async ({
         result[key] &&
         valueFormat &&
         valueFormat[0] &&
-        valueFormat[1]
+        valueFormat[1] &&
+        typeof result[key] !== "object"
       ) {
         switch (valueFormat[0].toString().toLowerCase()) {
           case "date":
