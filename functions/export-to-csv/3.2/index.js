@@ -101,35 +101,51 @@ const generateGraphQLQuery = (obj, indent = 0) => {
   return query;
 };
 
-const dataExport = async ({
-  modelSource: { name: modelNameSource },
-  delimiter: fieldSeparator,
-  modelTarget: { name: modelNameTarget },
-  propertyTarget: [{ name: propertyNameTarget }],
-  exportPropertyMapping,
-  formatPropertyMapping,
-  useBom,
-  fileName,
-  filter,
-  filterVariables,
-  type,
-}) => {
+const dataExport = async (props) => {
+  const {
+    modelSource: { name: modelNameSource },
+    delimiter: fieldSeparator,
+    modelTarget: { name: modelNameTarget },
+    propertyTarget: [{ name: propertyNameTarget }],
+    exportPropertyMapping,
+    formatPropertyMapping,
+    useBom,
+    fileName,
+    filter,
+    filterVariables,
+    type,
+    logging = false,
+  } = props;
+
+  if (logging) {
+    console.log("Starting export to EXCEL/CSV with the following options:");
+    console.log(props);
+  }
+
   const gqlPropertyNames = convertMappingToGraphQLQuery([
     ...exportPropertyMapping,
   ]);
+
+  if (logging) {
+    console.log("gqlPropertyNames", gqlPropertyNames);
+  }
 
   const variableMap = filterVariables.reduce((previousValue, currentValue) => {
     previousValue[currentValue.key] = currentValue.value;
     return previousValue;
   }, {});
 
+  if (logging) {
+    console.log("variableMap", variableMap);
+  }
+
   const getValue = (prop, obj) => {
     const exportPropKey = exportPropertyMapping.find(
-      (item) => item.value === camelToSnake(prop)
+      (item) => item.value === camelToSnake(prop),
     )?.key;
 
     const formatMapping = formatPropertyMapping.find(
-      (item) => item.key === exportPropKey
+      (item) => item.key === exportPropKey,
     )?.value;
 
     const valueFormat = formatMapping && formatMapping.split("|");
@@ -170,6 +186,10 @@ const dataExport = async ({
       ? `where: {${templayed(filter)(variableMap)}}`
       : ``;
 
+  if (logging) {
+    console.log("queryFilter", query);
+  }
+
   const query = `
     query {
       all${modelNameSource}(${queryFilter} skip: $skip, take: $take) {
@@ -180,7 +200,16 @@ const dataExport = async ({
     }
   `;
 
+  if (logging) {
+    console.log("query", query);
+  }
+
   const exportData = await getAllRecords(query, 0, 200, []);
+
+  if (logging) {
+    console.log("exportData", exportData);
+    console.log("exportData.length", exportData.length);
+  }
 
   const exportColumnNames = [...exportPropertyMapping].reduce(
     (acc, { key, value }) => ({
@@ -195,8 +224,12 @@ const dataExport = async ({
             : snakeToCamel(value),
       },
     }),
-    {}
+    {},
   );
+
+  if (logging) {
+    console.log("exportColumnNames", exportColumnNames);
+  }
 
   const exportDataWithColumnNamesOrdered = exportData.map((obj) => {
     return Object.keys(exportColumnNames).reduce((acc, curr) => {
@@ -206,6 +239,13 @@ const dataExport = async ({
       };
     }, {});
   });
+
+  if (logging) {
+    console.log(
+      "exportDataWithColumnNamesOrdered",
+      exportDataWithColumnNamesOrdered,
+    );
+  }
 
   try {
     if (type == "csv") {
@@ -224,7 +264,7 @@ const dataExport = async ({
               useTextFile: false,
               useBom,
               useKeysAsHeaders: true,
-            }).generateCsv(exportDataWithColumnNamesOrdered, true)
+            }).generateCsv(exportDataWithColumnNamesOrdered, true),
           ),
         }),
       };

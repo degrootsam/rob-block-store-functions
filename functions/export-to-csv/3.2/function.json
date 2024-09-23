@@ -146,6 +146,16 @@
       }
     },
     {
+      "label": "Logging",
+      "name": "logging",
+      "info": "If true, logs the export process.",
+      "meta": {
+        "type": "Boolean",
+        "default": false
+      },
+      "advanced": true
+    },
+    {
       "meta": {
         "type": "Output",
         "validations": {
