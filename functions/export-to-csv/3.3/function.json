@@ -1,0 +1,174 @@
+{
+  "description": "Create a CSV or Excel file from a collection of records",
+  "label": "Export to CSV/XLSX",
+  "category": "Utilities",
+  "icon": {
+    "color": "Green",
+    "name": "DownloadIcon"
+  },
+  "options": [
+    {
+      "name": "type",
+      "label": "Type",
+      "meta": {
+        "type": "Select",
+        "default": "csv",
+        "validations": {
+          "required": true
+        },
+        "values": [
+          { "label": "CSV", "value": "csv" },
+          { "label": "Excel", "value": "xlsx" }
+        ]
+      }
+    },
+    {
+      "name": "modelSource",
+      "label": "Model to export records from",
+      "meta": {
+        "type": "Model",
+        "validations": {
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "filter",
+      "label": "Filter",
+      "info": "Filter based on Data API filter with variable options.",
+      "meta": {
+        "type": "Text",
+        "default": ""
+      }
+    },
+    {
+      "info": "Variables to be used in the filter option.",
+      "label": "Variables",
+      "meta": {
+        "type": "Map"
+      },
+      "name": "filterVariables"
+    },
+    {
+      "label": "Delimiter",
+      "info": "Set a delimiter for the CSV file.",
+      "name": "delimiter",
+      "meta": {
+        "validations": {
+          "required": true
+        },
+        "type": "Select",
+        "values": [
+          {
+            "label": ";",
+            "value": ";"
+          },
+          {
+            "label": ",",
+            "value": ","
+          },
+          {
+            "label": "|",
+            "value": "|"
+          },
+          {
+            "label": "tab",
+            "value": "\t"
+          },
+          {
+            "label": "space",
+            "value": " "
+          }
+        ]
+      }
+    },
+    {
+      "meta": {
+        "type": "Model",
+        "validations": {
+          "required": true
+        }
+      },
+      "name": "modelTarget",
+      "label": "Model to save file into"
+    },
+    {
+      "meta": {
+        "allowedKinds": ["FILE"],
+        "type": "Property",
+        "model": "modelTarget",
+        "validations": {
+          "required": true
+        }
+      },
+      "configuration": {
+        "dependsOn": [
+          {
+            "option": "modelTarget",
+            "action": "CLEAR"
+          }
+        ]
+      },
+      "name": "propertyTarget",
+      "label": "Property to save file into"
+    },
+    {
+      "name": "fileName",
+      "label": "Filename",
+      "info": "Name of the exported file",
+      "meta": {
+        "type": "Text"
+      }
+    },
+    {
+      "name": "exportPropertyMapping",
+      "label": "Property Mapping",
+      "info": "KEY = desired column name in the export file, VALUE = the database name (in snake_case) of the property. For belongs-to relations also use the datebase name (in snake_case)",
+      "meta": {
+        "type": "Map"
+      }
+    },
+    {
+      "name": "formatPropertyMapping",
+      "label": "Format mapping for export columns",
+      "info": "KEY = column name in the export file (same as key in property mapping above), VALUE = format of the property value. Supported properties: \"Price\", \"Decimal\", \"Date\", \"Time\", or \"Datetime\". The notation can be as follows: \"Decimal|.\", e.g. \"Decimal|,\" or \"Date|<datefns format>\", e.g. \"Date|dd-MM-yyyy\". The date format after the pipe symbol needs to be entered in accordance with the date-fns format (e.g. dd-MM-yyyy or MM/dd/yyyy etc), see https://date-fns.org/v2.16.1/docs/format",
+      "meta": {
+        "type": "Map"
+      }
+    },
+    {
+      "label": "Use BOM",
+      "name": "useBom",
+      "info": "If true, adds a BOM character at the start of the CSV to improve file compatibility.",
+      "meta": {
+        "type": "Boolean",
+        "default": true
+      }
+    },
+    {
+      "label": "Logging",
+      "name": "logging",
+      "info": "If true, logs the export process.",
+      "meta": {
+        "type": "Boolean",
+        "default": false
+      },
+      "advanced": true
+    },
+    {
+      "meta": {
+        "type": "Output",
+        "validations": {
+          "required": true
+        },
+        "output": {
+          "type": "Text"
+        }
+      },
+      "name": "reference",
+      "label": "As",
+      "info": "The file reference"
+    }
+  ],
+  "yields": "NONE"
+}
